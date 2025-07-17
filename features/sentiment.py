@@ -1,12 +1,9 @@
 import openai
 from extract_txt import extract_txt
 
-def sentiment(report_text, api, tables = False):
+def sentiment(client, report_text, tables=None):
 
-    # Set your API key here
-    openai.api_key = api
-
-    # Construct the prompt
+    # Construct the system prompt
     system_prompt = (
         "You are a financial sentiment classifier. "
         "Classify the given company report excerpt into one of the following categories:\n\n"
@@ -16,31 +13,42 @@ def sentiment(report_text, api, tables = False):
         "- Warning Signs: Business is okay overall, but with some concerns.\n"
         "- Uncertain: Business faces many or significant unknowns or risks.\n"
         "- Worse Than Expected: Results are disappointing or below expectations.\n\n"
-        "Reply ONLY with the best-fitting label from the list above."
+        "Reply with the best-fitting label from the list above, followed by a brief explanation of why that label was chosen.\n"
+        "One negative comment weighs more than one positive."
     )
+
+    if tables:
+        # If tables exist, add an instruction
+        system_prompt += (
+            "\n\nThe tables have been extracted and attached from the report to help you identify them. "
+            "If the rows seem to miss labels, they are probably the same as in the previous table."
+        )
+        # Append the tables to the user message
+        report_text += "\n\n=== Extracted Tables ===\n" + "\n".join(tables)
 
     # Call the Chat API
-    response = openai.ChatCompletion.create(
-        model="gpt-4o",  # You can switch to gpt-3.5-turbo if needed
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": report_text}
-        ],
-        temperature=0  # Deterministic output
+    response = client.chat.completions.create(
+    model="gpt-4o", #gpt-3.5-turbo
+    messages=[
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": report_text}
+    ],
+    temperature=0
     )
 
-    # Output the classification
-    classification = response['choices'][0]['message']['content'].strip()
+    classification = response.choices[0].message.content.strip()
+
     return classification
 
 if __name__=='__main__':
 
-    text, tables = extract_txt("test_data/VPLAY-B24Q3.pdf")
+    text, tables = extract_txt("test_data/VPLAY-B25Q2.pdf")
     
     api = "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"
 
     q = input('Want to use API? (y/n): ')
 
     if q == 'y':
-        classification = sentiment(text, api)
+        client = openai.OpenAI(api_key=api)  # You can pass api_key here, or set OPENAI_API_KEY env var
+        classification = sentiment(client, text)
         print(f"Classification: {classification}")
