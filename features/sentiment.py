@@ -5,17 +5,44 @@ def sentiment(client, report_text, tables=None):
 
     # Construct the system prompt
     system_prompt = (
-        "You are a financial sentiment classifier. "
-        "Classify the given company report excerpt into one of the following categories:\n\n"
-        "- Strong Positive: Results are clearly better than expected, strong outlook.\n"
-        "- Moderate Positive: Some signs of improvement, but not yet strong.\n"
+        "You are a financial analyst AI. Given a company report excerpt, classify it from three perspectives. "
+        "Use only the EXACT labels provided below and follow the exact output format.\n\n"
+
+        "### Sentiment Classification ###\n"
+        "Pick ONE of the following labels: 'Positive', 'Potential', 'Neutral', 'Warning Signs', 'Worse Than Expected'.\n"
+        "- Positive: Results exceeded expectations.\n"
+        "- Potential: Stronger outlook than current performance.\n"
         "- Neutral: Performance is as expected.\n"
-        "- Warning Signs: Business is okay overall, but with some concerns.\n"
-        "- Uncertain: Business faces many or significant unknowns or risks.\n"
-        "- Worse Than Expected: Results are disappointing or below expectations.\n\n"
-        "Reply with the best-fitting label from the list above, followed by a brief explanation of why that label was chosen.\n"
-        "One negative comment weighs more than one positive."
+        "- Warning Signs: Business is okay overall, but with some concerning outlooks not according to plan.\n"
+        "- Worse Than Expected: Results are disappointing or below expectations.\n"
+        "Only use one label exactly as written. Then explain your reasoning.\n\n"
+
+        "### Strategy Change Classification ###\n"
+        "Pick ONE of the following labels: 'None', 'Changed'.\n"
+        "- None: No clear or significant change in strategy or targets.\n"
+        "- Changed: There is a major shift in strategy, direction, or company targets (e.g., new business model, sharp pivot, market exit/entry, etc.).\n"
+        "Only use one label exactly as written. Then briefly explain your reasoning.\n\n"
+
+       "### Restructuring Classification ###\n"
+        "Pick one or more of the following labels: 'None', 'Refinancing', 'Spinoff', 'Sale', 'Merger', 'Major Cost Reduction', 'Unknown'.\n"
+        "If multiple labels apply, separate them with a comma and a single space (e.g., 'Sale, Major Cost Reduction').\n"
+        "- None: No significant restructuring mentioned.\n"
+        "- Refinancing: New capital or debt taken primarily to stabilize operations (not for investment).\n"
+        "- Spinoff: A subsidiary is being separated to be listed independently.\n"
+        "- Sale: A subsidiary or business unit is being sold.\n"
+        "- Merger: A full merger with another company (exclude acquisitions).\n"
+        "- Major Cost Reduction: A clearly impactful cost-cutting measure beyond routine efficiencies.\n"
+        "- Unknown: Restructuring is mentioned, but the form is unclear.\n"
+        "Only use the labels exactly as written. Then explain your reasoning.\n\n"
+
+        "### Output Format (Strict) ###\n"
+        "Sentiment: <label>\nReason: <brief explanation>\n\n"
+        "Strategy: <label>\nReason: <brief explanation>\n\n"
+        "Restructuring: <label(s)>\nReason: <brief explanation>"
+
+        "Do not include any other text outside of the required format."
     )
+
 
     if tables:
         # If tables exist, add an instruction
@@ -28,7 +55,7 @@ def sentiment(client, report_text, tables=None):
 
     # Call the Chat API
     response = client.chat.completions.create(
-    model="gpt-4o", #gpt-3.5-turbo
+    model="gpt-3.5-turbo", #gpt-3.5-turbo gpt-4o
     messages=[
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": report_text}
@@ -41,14 +68,10 @@ def sentiment(client, report_text, tables=None):
     return classification
 
 if __name__=='__main__':
-
-    text, tables = extract_txt("test_data/VPLAY-B25Q2.pdf")
+    text, tables = extract_txt("test_data/VPLAY-B24Q4.pdf")
     
     api = "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"
 
-    q = input('Want to use API? (y/n): ')
-
-    if q == 'y':
-        client = openai.OpenAI(api_key=api)  # You can pass api_key here, or set OPENAI_API_KEY env var
-        classification = sentiment(client, text)
-        print(f"Classification: {classification}")
+    client = openai.OpenAI(api_key=api)  # You can pass api_key here, or set OPENAI_API_KEY env var
+    classification = sentiment(client, text)
+    print(classification)
