@@ -3,7 +3,8 @@
 
 This project requires the following Python libraries:
 
-- transformers
+- openai
+- pdplumber
 
 ## Features
 
