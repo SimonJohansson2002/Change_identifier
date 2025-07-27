@@ -19,6 +19,12 @@ To start/stop the database:
 
 Note: The database does not run automatically when the computer is booted.
 
+Use MySQL in python:
+- mydb, mycursor = access_db('password', 'name') if database already exists
+- mydb, mycursor = init_db('jfyu_1&ofQnsp1^d6FJ') if it does not exist
+
+Once database is running, mydb and mycursor should exist as a global variable. 
+
 ## Features
 
 The features are:
