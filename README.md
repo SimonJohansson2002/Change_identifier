@@ -4,6 +4,8 @@
 This project requires the following Python libraries:
 - openai
 - pdplumber
+- requests
+- beautifulsoup4
 
 ## Database
 
