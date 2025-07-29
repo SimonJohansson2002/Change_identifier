@@ -54,16 +54,20 @@ def classifier(client, report_text, tables=None):
         report_text += "\n\n=== Extracted Tables ===\n" + "\n".join(tables)
 
     # Call the Chat API
-    response = client.chat.completions.create(
-    model="gpt-3.5-turbo", #gpt-3.5-turbo gpt-4o
-    messages=[
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": report_text}
-    ],
-    temperature=0
-    )
+    try: 
+        response = client.chat.completions.create(
+        model="gpt-3.5-turbo", #gpt-3.5-turbo gpt-4o
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": report_text}
+        ],
+        temperature=0
+        )
 
-    classification = response.choices[0].message.content.strip()
+        classification = response.choices[0].message.content.strip()
+    
+    except: 
+        classification = 'Unable to get response from ChatGPT API'
 
     return classification
 

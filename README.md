@@ -5,7 +5,9 @@ This project requires the following Python libraries:
 - openai
 - pdplumber
 - requests
-- beautifulsoup4
+- BeautifulSoup from bs4
+- PdfReader from PyPDF2
+- BytesIO from io
 
 ## Database
 
@@ -63,3 +65,12 @@ The following are the restructure classes:
     - Merger
     - Major cost reduction
     - Unknown
+
+### Errors
+Classifying
+- 'Unable to use ChatGPT API' -> Possible reasons are insufficient balance on OpenAI or failing API key.
+
+Scraping
+- 'No PDF available' -> No pdf with title "PDF" available for the latest notification in MFN
+- 'No pdf:s available' -> No pdf:s with any title available for the latest notification in MFN
+- 'Error reading PDF' -> pdf exists but couldn't read it
