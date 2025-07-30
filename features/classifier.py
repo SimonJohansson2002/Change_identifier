@@ -1,8 +1,18 @@
 import openai
 from extract_txt import extract_txt
 
-def classifier(client, report_text, tables=None):
+def classifier(client: openai.OpenAI, report_text: str, tables: list=None) -> str:
+    """
+    Classifies sentiment of the text, identifies if there is a change in strategy, and if there is any kind of restructuring. 
 
+    Args:
+        client (openai.OpenAI): openai client with api key
+        report_text (str): text to be analyzed
+        tables (list, optional): list of tables from the text to help ChatGPT understand what content are tables. Defaults to None.
+
+    Returns:
+        str: output from ChatGPT. If error occurs with the client, 'Unable to get response from ChatGPT API' is returned
+    """
     # Construct the system prompt
     system_prompt = (
         "You are a financial analyst AI. Given a company report excerpt, classify it from three perspectives. "
