@@ -2,3 +2,4 @@ venv/
 test_data/
 init.txt
 .vscode/
+test.*

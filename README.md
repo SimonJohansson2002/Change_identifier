@@ -5,9 +5,11 @@ This project requires the following Python libraries:
 - openai
 - pdplumber
 - requests
+- mysql.connector
 - BeautifulSoup from bs4
 - PdfReader from PyPDF2
 - BytesIO from io
+- Flask
 
 ## Database
 
@@ -65,6 +67,13 @@ The following are the restructure classes:
     - Merger
     - Major cost reduction
     - Unknown
+
+### Website
+
+Redirecting:
+- code 302: default and tells the browser not to cache the redirection (not to mix up with information on the page)
+- code 301: tells the browser to cache the new URL to a web page, e.g. if a page is moved from /old_url to /new_url in a website 
+restructuring. This would make the user being redirected to /new_url even if the /old_url is entered. 
 
 ### Errors
 Classifying
