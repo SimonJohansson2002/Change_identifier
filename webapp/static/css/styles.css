@@ -1,0 +1,92 @@
+body {
+  font-family: 'Fira Sans', sans-serif;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 0;
+  background: linear-gradient(to bottom, rgb(80, 80, 80), rgb(30, 30, 30));
+  color: rgb(200, 200, 200);
+  min-height: 100vh;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.header-row a {
+    text-decoration: none;
+    color: inherit;
+}
+
+hr.lighter {
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0;
+  margin-bottom: 0;
+  border-color: rgb(200, 200, 200); 
+}
+
+hr.darker {
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  border-color: rgb(170, 170, 170);
+}
+
+h1, h2 {
+  font-weight: 400;
+}
+
+h1 {
+  font-size: 40px;
+  padding-bottom: 0;
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
+
+h2 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+}
+
+/* Shared base style */
+.bar-button {
+  padding: 15px;
+  width: 200px;
+  border: none;
+  background: transparent;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 16px;
+  color: rgb(200, 200, 200);
+  position: relative;
+  cursor: pointer;
+  text-align: center;
+  transition: color 0.3s;
+  border-radius: 5px;
+}
+
+/* Hover effect (shared) */
+.bar-button:hover {
+  color: rgb(200, 200, 200);
+  background-color: rgb(120, 120, 120);
+}
+
+.bar-row {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin: 5px;
+}
+
+hr.vertical-small {
+  width: 2px;
+  margin: 5px;
+  padding: 0;
+  background-color: rgb(170, 170, 170);
+  border: none;
+}
