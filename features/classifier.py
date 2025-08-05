@@ -42,6 +42,7 @@ def classifier(client: openai.OpenAI, report_text: str, tables: list=None) -> st
         "- Sale: A subsidiary or business unit is being sold.\n"
         "- Merger: A full merger with another company (exclude acquisitions).\n"
         "- Major Cost Reduction: A clearly impactful cost-cutting measure beyond routine efficiencies.\n"
+        "- Bankruptcy: Bankruptcy is being discussed or has been decided.\n"
         "- Unknown: Restructuring is mentioned, but the form is unclear.\n"
         "Only use the labels exactly as written. Then explain your reasoning.\n\n"
 

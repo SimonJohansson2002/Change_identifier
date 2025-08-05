@@ -66,6 +66,7 @@ The following are the restructure classes:
 - Sale
 - Merger
 - Major cost reduction
+- Bankruptcies
 - Unknown
 
 ### Website
