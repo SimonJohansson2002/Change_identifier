@@ -1,5 +1,5 @@
 import openai
-from extract_txt import extract_txt
+from .extract_txt import extract_txt
 
 def classifier(client: openai.OpenAI, report_text: str, tables: list=None) -> str:
     """

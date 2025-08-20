@@ -7,7 +7,7 @@ import mysql.connector
 
 # Tables -------------------------------------
 
-def add_table(table: str, columns: list[str]):
+def add_table(mycursor, table: str, columns: list[str]):
     """
     Adds a table if it does not exist. Does nothing if it exists.
 
@@ -15,23 +15,23 @@ def add_table(table: str, columns: list[str]):
         table (str): table name
         columns (list[str]): list of column names, should be larger than 1
     """
-    cols = f'{columns[0]} VARCHAR(255)'
+    cols = f"`{columns[0]}` VARCHAR(255)"
 
     if len(columns)<2:
         raise IndexError('Too few columns. Add at least 2 columns.')
     
     for col in columns[1:]:
-        cols += f', {col} VARCHAR(255)'
+        cols += f", `{col}` VARCHAR(255)"
 
     mycursor.execute(f"CREATE TABLE IF NOT EXISTS {table} ({cols})")
 
-def drop_table(table: str):
+def drop_table(mycursor, table: str):
     """
     Drops a table if it exists. Does nothing if it does not exist.
     """
     mycursor.execute(f"DROP TABLE IF EXISTS {table}")
 
-def show_tables():
+def show_tables(mycursor):
     """
     Prints the names of the existing tables. The database must have been accessed through access_db.
     """
@@ -41,7 +41,7 @@ def show_tables():
     for x in mycursor:
         print(x)
 
-def insert(table: str, val: list[tuple]):
+def insert(mydb, mycursor, table: str, val: list[tuple]):
     """
     Inserts list of tuples in a table. All tuples must equal dimension, larger than 0. 
 
@@ -60,7 +60,7 @@ def insert(table: str, val: list[tuple]):
     mycursor.executemany(sql, val)
     mydb.commit()
 
-def content_table(table: str, columns=['*']):
+def content_table(mycursor, table: str, columns=['*']):
     """
     Prints content in table in the current database. 
 
@@ -78,7 +78,7 @@ def content_table(table: str, columns=['*']):
     for x in myresult:
         print(x)
 
-def print_specific(table: str, column: str, val):
+def print_specific(mycursor, table: str, column: str, val):
     """
     Prints all rows in the table whith a specific value in a given column. 
 
@@ -98,7 +98,7 @@ def print_specific(table: str, column: str, val):
     for x in myresult:
         print(x)
 
-def print_sorted(table: str, column: str, order: int=0):
+def print_sorted(mycursor, table: str, column: str, order: int=0):
     """
     Prints table ordered in ascending (default) or descending order by chosen column. 
 
@@ -119,7 +119,7 @@ def print_sorted(table: str, column: str, order: int=0):
     for x in myresult:
         print(x)
 
-def delete_rows(table: str, column: str, val):
+def delete_rows(mydb, mycursor, table: str, column: str, val):
     """
     Deletes all rows in the table whith a specific value in a given column.
 
@@ -135,7 +135,7 @@ def delete_rows(table: str, column: str, val):
 
     mydb.commit()
 
-def unique_update(table: str, id_column: str, id, update_column: str, new_value):
+def unique_update(mycursor, table: str, id_column: str, id, update_column: str, new_value):
     """
     Updates value an existing column in an existing row. 
 
@@ -151,7 +151,7 @@ def unique_update(table: str, id_column: str, id, update_column: str, new_value)
     val = (new_value, id)
     mycursor.execute(sql, val)
 
-def print_limited_rows(table: str, limit: int, offset: int=0):
+def print_limited_rows(mycursor, table: str, limit: int, offset: int=0):
     """
     Prints a limited number of rows, ignoring a given number of rows.
 

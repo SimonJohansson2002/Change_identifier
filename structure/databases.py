@@ -36,19 +36,19 @@ def access_db(password: str, database: str):
 
     return mydb, mycursor
 
-def add_db(name: str):
+def add_db(mycursor, name: str):
     """
     Adds a database if it does not exist. Does nothing if it exists.
     """
     mycursor.execute(f"CREATE DATABASE IF NOT EXISTS {name}")
 
-def drop_db(name: str):
+def drop_db(mycursor, name: str):
     """
     Drops a database if it exists. Does nothing if it does not exist.
     """
     mycursor.execute(f"DROP DATABASE IF EXISTS {name}")
 
-def show_dbs():
+def show_dbs(mycursor):
     """
     Prints the names of the existing databases. 
     """

@@ -1,5 +1,5 @@
-from classifier import classifier
-from extract_txt import extract_txt
+from .classifier import classifier
+from .extract_txt import extract_txt
 import openai
 
 def structure_output(string: str) -> dict:
@@ -33,6 +33,13 @@ def structure_output(string: str) -> dict:
     
     return d
 
+def get_classifications(filename: str, api_key: str) -> str:
+    text, tables = extract_txt(filename)
+
+    client = openai.OpenAI(api_key=api_key)
+    classification = classifier(client, text)
+
+    return structure_output(classification)
 
 
 if __name__=='__main__':

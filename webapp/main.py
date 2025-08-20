@@ -6,17 +6,9 @@ app = Flask(__name__)
 def init():
     return render_template('main.html')
 
-@app.route('/restructurings')
-def go_restructuring():
-    return render_template('restructuring.html')
-
-@app.route('/strategy-changes')
-def go_strategy():
-    return render_template('strategy.html')
-
-@app.route('/sentiments')
+@app.route('/screener')
 def go_sentiment():
-    return render_template('sentiment.html')
+    return render_template('screener.html')
 
 if __name__=='__main__':
     app.run(debug=True)
