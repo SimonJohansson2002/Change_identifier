@@ -34,22 +34,22 @@ Once database is running, mydb and mycursor should exist as a global variable.
 ## Features
 
 The features are:
-- Sentiment classification
+- Summary
+- Guidance
 - Strategy classification
 - Restructure classification
 
+- Sentiment classification
+
 Each feature will be viewed dynamically and change in classification will be key output. 
 
-### Sentiment classification
+### Summary
 
-The following are the sentiment classes:
-- Positive
-- Potential
-- Neutral
-- Warning Signs
-- Worse Than Expected
+A summary of the company's key highlights, accomplishments, and challenges is generated. Maximum 250 characters. 
 
-If the prompts or model are changed in any way, such as even a single character in the input, the order of messages, the model version (e.g., switching from gpt-4o to gpt-3.5-turbo), or add/remove whitespace in a sensitive context, then the output might change slightly.
+### Guidance
+
+The company's financial guidance is extracted if it exists. 
 
 ### Strategy classification
 
@@ -60,7 +60,6 @@ The following are the strategy classes:
 ### Restructure classifier
 
 The following are the restructure classes:
-- None
 - Refinancing
 - Spinoff
 - Sale
@@ -68,6 +67,19 @@ The following are the restructure classes:
 - Major cost reduction
 - Bankruptcies
 - Unknown
+
+### Sentiment classification
+
+THIS WILL BE CHANGED
+
+The following are the sentiment classes:
+- Positive
+- Potential
+- Neutral
+- Warning Signs
+- Worse Than Expected
+
+If the prompts or model are changed in any way, such as even a single character in the input, the order of messages, the model version (e.g., switching from gpt-4o to gpt-3.5-turbo), or add/remove whitespace in a sensitive context, then the output might change slightly.
 
 ### Website
 
@@ -84,3 +96,4 @@ Scraping
 - 'No PDF available' -> No pdf with title "PDF" available for the latest notification in MFN
 - 'No pdf:s available' -> No pdf:s with any title available for the latest notification in MFN
 - 'Error reading PDF' -> pdf exists but couldn't read it
+

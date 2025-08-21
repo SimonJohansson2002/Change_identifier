@@ -60,13 +60,47 @@ def insert(mydb, mycursor, table: str, val: list[tuple]):
     mycursor.executemany(sql, val)
     mydb.commit()
 
-def content_table(mycursor, table: str, columns=['*']):
+def add_column(mydb, mycursor, table_name: str, column_name: str, datatype: str = 'VARCHAR(255)'):
+    """Adds another column.
+
+    Args:
+        tablename (str): name of an existing table
+        columnname (str): name of new column
+        datatype (str, optional): See datatypes for MySQL. Defaults to 'VARCHAR(255)'.
     """
-    Prints content in table in the current database. 
+
+    alter_query = f"ALTER TABLE `{table_name}` ADD COLUMN `{column_name}` {datatype};"
+    
+    mycursor.execute(alter_query)
+    
+    mydb.commit()
+
+def get_col_names(mycursor, table_name: str) -> list[str]:
+    """
+    Returns a list of existing columns. 
+
+    Args:
+        table_name (str): name of the table
+
+    Returns:
+        list[str]: contains existing values
+    """
+
+    mycursor.execute(f"DESCRIBE {table_name};")
+    columns = [row[0] for row in mycursor.fetchall()]
+
+    return columns
+
+def get_values(mycursor, table: str, columns=['*']) -> list[tuple]:
+    """
+    Returns values from selected columns in table in the current database. 
 
     Args:
         table (str): table name
         columns (list, optional): list of columns or rows. Defaults to '*', i.e. the whole table.
+
+    Returns: 
+        list[tuple]: list of values as tuples
     """
 
     columns = ', '.join(columns)
@@ -75,17 +109,19 @@ def content_table(mycursor, table: str, columns=['*']):
 
     myresult = mycursor.fetchall()
 
-    for x in myresult:
-        print(x)
+    return myresult
 
-def print_specific(mycursor, table: str, column: str, val):
+def get_specific(mycursor, table: str, column: str, val) -> list[tuple]:
     """
-    Prints all rows in the table whith a specific value in a given column. 
+    Returns all rows in the table with a specific value in a given column. 
 
     Args:
         table (str): table name
         column (str): column name
         val (_type_): specific value to look for, type depends on what it was inserted as
+
+    Returns:
+        list[tuple]: list of rows as tuples with a specific value in a given column
     """
 
     sql = f"SELECT * FROM {table} WHERE {column} = %s"
@@ -95,17 +131,19 @@ def print_specific(mycursor, table: str, column: str, val):
 
     myresult = mycursor.fetchall()
 
-    for x in myresult:
-        print(x)
+    return myresult
 
-def print_sorted(mycursor, table: str, column: str, order: int=0):
+def get_sorted(mycursor, table: str, column: str, order: int=0) -> list[tuple]:
     """
-    Prints table ordered in ascending (default) or descending order by chosen column. 
+    Returns table ordered in ascending (default) or descending order by chosen column. 
 
     Args:
         table (str): table name
         column (str): column name to order by
         order (int, optional): 0 sorts in ascending order. 1 sorts in descending order. Defaults to 0.
+
+    Returns:
+        list[tuple]: list of tupels with values ordered by a given column
     """
     if order == 0:
         sql = f"SELECT * FROM {table} ORDER BY {column}"
@@ -116,8 +154,7 @@ def print_sorted(mycursor, table: str, column: str, order: int=0):
 
     myresult = mycursor.fetchall()
 
-    for x in myresult:
-        print(x)
+    return myresult
 
 def delete_rows(mydb, mycursor, table: str, column: str, val):
     """
@@ -137,7 +174,7 @@ def delete_rows(mydb, mycursor, table: str, column: str, val):
 
 def unique_update(mycursor, table: str, id_column: str, id, update_column: str, new_value):
     """
-    Updates value an existing column in an existing row. 
+    Updates value in an existing column in an existing row. 
 
     Args:
         table (str): table name
@@ -151,14 +188,17 @@ def unique_update(mycursor, table: str, id_column: str, id, update_column: str, 
     val = (new_value, id)
     mycursor.execute(sql, val)
 
-def print_limited_rows(mycursor, table: str, limit: int, offset: int=0):
+def get_limited_rows(mycursor, table: str, limit: int, offset: int=0) -> list[tuple]:
     """
-    Prints a limited number of rows, ignoring a given number of rows.
+    Returns a limited number of rows, ignoring a given number of rows.
 
     Args:
         table (str): table name
         limit (int): number of rows to print
         offset (int, optional): rows ignored before printing. Defaults to 0.
+
+    Returns:
+        list[tuple]: list of limited number of rows as tuples
     """
 
     if offset == 0:
@@ -172,8 +212,7 @@ def print_limited_rows(mycursor, table: str, limit: int, offset: int=0):
     
     myresult = mycursor.fetchall()
 
-    for x in myresult:
-        print(x)
+    return myresult
 
 def join():
     """

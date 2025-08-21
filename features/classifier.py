@@ -18,14 +18,11 @@ def classifier(client: openai.OpenAI, report_text: str, tables: list=None) -> st
         "You are a financial analyst AI. Given a company report excerpt, classify it from three perspectives. "
         "Use only the EXACT labels provided below and follow the exact output format.\n\n"
 
-        "### Sentiment Classification ###\n"
-        "Pick ONE of the following labels: 'Positive', 'Potential', 'Neutral', 'Warning Signs', 'Worse Than Expected'.\n"
-        "- Positive: Results exceeded expectations.\n"
-        "- Potential: Stronger outlook than current performance.\n"
-        "- Neutral: Performance is as expected.\n"
-        "- Warning Signs: Business is okay overall, but with some concerning outlooks not according to plan.\n"
-        "- Worse Than Expected: Results are disappointing or below expectations.\n"
-        "Only use one label exactly as written. Then explain your reasoning.\n\n"
+        "### Summary ###\n"
+        "Summarize the text briefly (max 250 characters). Focus on the company's key highlights, achievements, and challenges. Be concise and factual.\n\n"
+
+        "### Guidance ###\n"
+        "Extract the company's financial guidance if mentioned. If no guidance is provided, return exactly 'None'.\n\n"
 
         "### Strategy Change Classification ###\n"
         "Pick ONE of the following labels: 'None', 'Changed'.\n"
@@ -34,22 +31,30 @@ def classifier(client: openai.OpenAI, report_text: str, tables: list=None) -> st
         "Only use one label exactly as written. Then briefly explain your reasoning.\n\n"
 
        "### Restructuring Classification ###\n"
-        "Pick one or more of the following labels: 'None', 'Refinancing', 'Spinoff', 'Sale', 'Merger', 'Major Cost Reduction', 'Unknown'.\n"
-        "If multiple labels apply, separate them with a comma and a single space (e.g., 'Sale, Major Cost Reduction').\n"
-        "- None: No significant restructuring mentioned.\n"
-        "- Refinancing: New capital or debt taken primarily to stabilize operations (not for investment).\n"
+        "For EACH of the following restructuring types, answer 'Yes' or 'No':\n"
+        "- Refinancing: New capital or debt taken primarily to stabilize operations (not for growth investment).\n"
         "- Spinoff: A subsidiary is being separated to be listed independently.\n"
-        "- Sale: A subsidiary or business unit is being sold.\n"
+        "- Sale: A subsidiary, asset, or business unit is being sold.\n"
         "- Merger: A full merger with another company (exclude acquisitions).\n"
         "- Major Cost Reduction: A clearly impactful cost-cutting measure beyond routine efficiencies.\n"
         "- Bankruptcy: Bankruptcy is being discussed or has been decided.\n"
         "- Unknown: Restructuring is mentioned, but the form is unclear.\n"
-        "Only use the labels exactly as written. Then explain your reasoning.\n\n"
+        "Provide a Yes/No for each type. Then explain your reasoning.\n\n"
 
         "### Output Format (Strict) ###\n"
-        "Sentiment: <label>\nReason: <brief explanation>\n\n"
-        "Strategy: <label>\nReason: <brief explanation>\n\n"
-        "Restructuring: <label(s)>\nReason: <brief explanation>"
+        "Summary: <max 250 characters>\n\n"
+        "Guidance: <guidance text or 'None'>\n\n"
+        "Strategy: <'None' or 'Changed'>\n"
+        "Reason: <brief explanation>\n\n"
+        "Restructuring:\n"
+        "Refinancing: <Yes/No>\n"
+        "Spinoff: <Yes/No>\n"
+        "Sale: <Yes/No>\n"
+        "Merger: <Yes/No>\n"
+        "Major Cost Reduction: <Yes/No>\n"
+        "Bankruptcy: <Yes/No>\n"
+        "Unknown: <Yes/No>\n"
+        "Reason: <brief explanation>"
 
         "Do not include any other text outside of the required format."
     )
@@ -90,3 +95,5 @@ if __name__=='__main__':
     client = openai.OpenAI(api_key=api)
     classification = classifier(client, text)
     print(classification)
+    with open("classification.txt", "w", encoding='utf-8') as f:
+        f.write(classification)
