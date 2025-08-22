@@ -7,7 +7,7 @@ import mysql.connector
 
 # Tables -------------------------------------
 
-def add_table(mycursor, table: str, columns: list[str]):
+def add_table(mycursor, table_name: str, columns: list[str]):
     """
     Adds a table if it does not exist. Does nothing if it exists.
 
@@ -15,21 +15,21 @@ def add_table(mycursor, table: str, columns: list[str]):
         table (str): table name
         columns (list[str]): list of column names, should be larger than 1
     """
-    cols = f"`{columns[0]}` VARCHAR(255)"
+    cols = f"`{columns[0]}` VARCHAR(500)"
 
     if len(columns)<2:
         raise IndexError('Too few columns. Add at least 2 columns.')
     
     for col in columns[1:]:
-        cols += f", `{col}` VARCHAR(255)"
+        cols += f", `{col}` VARCHAR(500)"
 
-    mycursor.execute(f"CREATE TABLE IF NOT EXISTS {table} ({cols})")
+    mycursor.execute(f"CREATE TABLE IF NOT EXISTS `{table_name}` ({cols})")
 
-def drop_table(mycursor, table: str):
+def drop_table(mycursor, table_name: str):
     """
     Drops a table if it exists. Does nothing if it does not exist.
     """
-    mycursor.execute(f"DROP TABLE IF EXISTS {table}")
+    mycursor.execute(f"DROP TABLE IF EXISTS `{table_name}`")
 
 def show_tables(mycursor):
     """
@@ -55,18 +55,18 @@ def insert(mydb, mycursor, table: str, val: list[tuple]):
 
     placeholders = ', '.join(['%s'] * num_columns)
 
-    sql = f"INSERT INTO {table} VALUES ({placeholders})"
+    sql = f"INSERT INTO `{table}` VALUES ({placeholders})"
 
     mycursor.executemany(sql, val)
     mydb.commit()
 
-def add_column(mydb, mycursor, table_name: str, column_name: str, datatype: str = 'VARCHAR(255)'):
+def add_column(mydb, mycursor, table_name: str, column_name: str, datatype: str = 'VARCHAR(500)'):
     """Adds another column.
 
     Args:
         tablename (str): name of an existing table
         columnname (str): name of new column
-        datatype (str, optional): See datatypes for MySQL. Defaults to 'VARCHAR(255)'.
+        datatype (str, optional): See datatypes for MySQL. Defaults to 'VARCHAR(500)'.
     """
 
     alter_query = f"ALTER TABLE `{table_name}` ADD COLUMN `{column_name}` {datatype};"
@@ -86,12 +86,12 @@ def get_col_names(mycursor, table_name: str) -> list[str]:
         list[str]: contains existing values
     """
 
-    mycursor.execute(f"DESCRIBE {table_name};")
+    mycursor.execute(f"DESCRIBE `{table_name}`;")
     columns = [row[0] for row in mycursor.fetchall()]
 
     return columns
 
-def get_values(mycursor, table: str, columns=['*']) -> list[tuple]:
+def get_columns(mycursor, table: str, columns: list[str]=['*']) -> list[tuple]:
     """
     Returns values from selected columns in table in the current database. 
 
@@ -103,15 +103,19 @@ def get_values(mycursor, table: str, columns=['*']) -> list[tuple]:
         list[tuple]: list of values as tuples
     """
 
-    columns = ', '.join(columns)
-
-    mycursor.execute(f"SELECT {columns} FROM {table}")
+    if columns==['*']:
+        columns = ', '.join(columns)
+        mycursor.execute(f"SELECT {columns} FROM `{table}`")
+    else:
+        columns = ['`'+i+'`' for i in columns]
+        columns = ', '.join(columns)
+        mycursor.execute(f"SELECT {columns} FROM `{table}`")
 
     myresult = mycursor.fetchall()
 
     return myresult
 
-def get_specific(mycursor, table: str, column: str, val) -> list[tuple]:
+def get_rows(mycursor, table: str, column: str, val) -> list[tuple]:
     """
     Returns all rows in the table with a specific value in a given column. 
 
@@ -124,7 +128,7 @@ def get_specific(mycursor, table: str, column: str, val) -> list[tuple]:
         list[tuple]: list of rows as tuples with a specific value in a given column
     """
 
-    sql = f"SELECT * FROM {table} WHERE {column} = %s"
+    sql = f"SELECT * FROM `{table}` WHERE `{column}` = %s"
     val = (val, )
 
     mycursor.execute(sql, val)
@@ -146,47 +150,15 @@ def get_sorted(mycursor, table: str, column: str, order: int=0) -> list[tuple]:
         list[tuple]: list of tupels with values ordered by a given column
     """
     if order == 0:
-        sql = f"SELECT * FROM {table} ORDER BY {column}"
+        sql = f"SELECT * FROM `{table}` ORDER BY `{column}`"
     elif order == 1:
-        sql = f"SELECT * FROM {table} ORDER BY {column} DESC"
+        sql = f"SELECT * FROM `{table}` ORDER BY `{column}` DESC"
 
     mycursor.execute(sql)
 
     myresult = mycursor.fetchall()
 
     return myresult
-
-def delete_rows(mydb, mycursor, table: str, column: str, val):
-    """
-    Deletes all rows in the table whith a specific value in a given column.
-
-    Args:
-        table (str): table name
-        column (str): column name
-        val (_type_): specific value to delete
-    """
-    sql = f"DELETE FROM {table} WHERE {column} = %s"
-    val = (val, )
-
-    mycursor.execute(sql, val)
-
-    mydb.commit()
-
-def unique_update(mycursor, table: str, id_column: str, id, update_column: str, new_value):
-    """
-    Updates value in an existing column in an existing row. 
-
-    Args:
-        table (str): table name
-        id_column (str): column name containg unique values
-        id (_type_): unique value (works with non-unique)
-        update_column (str): column name containg the value to be updated
-        new_value (_type_): value to be updated to
-    """
-
-    sql = f"UPDATE {table} SET {update_column} = %s WHERE {id_column} = %s"
-    val = (new_value, id)
-    mycursor.execute(sql, val)
 
 def get_limited_rows(mycursor, table: str, limit: int, offset: int=0) -> list[tuple]:
     """
@@ -204,15 +176,66 @@ def get_limited_rows(mycursor, table: str, limit: int, offset: int=0) -> list[tu
     if offset == 0:
         limit = str(limit)
         offset = str(offset)
-        mycursor.execute(f"SELECT * FROM {table} LIMIT {limit}")
+        mycursor.execute(f"SELECT * FROM `{table}` LIMIT {limit}")
     elif offset > 0:
         limit = str(limit)
         offset = str(offset)
-        mycursor.execute(f"SELECT * FROM {table} LIMIT {limit} OFFSET {offset}")
+        mycursor.execute(f"SELECT * FROM `{table}` LIMIT {limit} OFFSET {offset}")
     
     myresult = mycursor.fetchall()
 
     return myresult
+
+def delete_rows(mydb, mycursor, table: str, column: str, val):
+    """
+    Deletes all rows in the table whith a specific value in a given column.
+
+    Args:
+        table (str): table name
+        column (str): column name
+        val (_type_): specific value to delete
+    """
+    sql = f"DELETE FROM `{table}` WHERE `{column}` = %s"
+    val = (val, )
+
+    mycursor.execute(sql, val)
+
+    mydb.commit()
+
+def delete_column(mydb, mycursor, table_name: str, column_name: str):
+    """Deletes a column from a table.
+
+    Args:
+        table_name (str): name of an existing table
+        column_name (str): name of the column to delete
+    """
+    cols = get_col_names(mycursor, table_name)
+
+    if column_name in cols:
+        alter_query = f"ALTER TABLE `{table_name}` DROP COLUMN `{column_name}`;"
+        
+        mycursor.execute(alter_query)
+        mydb.commit()
+
+    else:
+        print(f"Error: '{column_name}' does not exist in '{table_name}'.")
+        return None
+
+def unique_update(mycursor, table: str, id_column: str, id, update_column: str, new_value):
+    """
+    Updates value in an existing column in an existing row. 
+
+    Args:
+        table (str): table name
+        id_column (str): column name containg unique values
+        id (_type_): unique value (works with non-unique)
+        update_column (str): column name containg the value to be updated
+        new_value (_type_): value to be updated to
+    """
+
+    sql = f"UPDATE `{table}` SET `{update_column}` = %s WHERE `{id_column}` = %s"
+    val = (new_value, id)
+    mycursor.execute(sql, val)
 
 def join():
     """
