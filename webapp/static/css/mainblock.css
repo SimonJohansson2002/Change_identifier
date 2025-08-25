@@ -1,16 +1,18 @@
 .main-blocks {
     display: flex;
     flex-direction: row; 
-    padding-top: 1.5%;
+    padding-top: 90px;
+    padding-bottom: 20px;
+    cursor: default;
 }
 
 .mid-block {
     width: 66%;
-    border-left: 1px solid rgb(200, 200, 200);
-    border-right: 1px solid rgb(200, 200, 200);
+    background-color: rgba(120, 120, 120, 0.5);
+    padding: 1%;
+    border-radius: 8px;
 }
 
-
-.left-block {
+.left-block, .right-block {
     width: 17%;
 }

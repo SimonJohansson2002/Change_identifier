@@ -7,6 +7,15 @@ body {
   margin: 0;
 }
 
+h2 {
+  margin: 0%;
+  font-weight: normal;
+}
+
+p {
+  font-weight: 300;
+}
+
 /* lines */
 hr.lighter {
   margin-left: 0px;

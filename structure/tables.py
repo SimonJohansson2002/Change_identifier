@@ -160,7 +160,7 @@ def get_sorted(mycursor, table: str, column: str, order: int=0) -> list[tuple]:
 
     return myresult
 
-def get_limited_rows(mycursor, table: str, limit: int, offset: int=0) -> list[tuple]:
+def get_limited_rows(mycursor, table: str, limit: int, offset: int=0, columns: list[str] = ['*'], order_col: str = "Date", order: int = 1) -> list[tuple]:
     """
     Returns a limited number of rows, ignoring a given number of rows.
 
@@ -168,23 +168,36 @@ def get_limited_rows(mycursor, table: str, limit: int, offset: int=0) -> list[tu
         table (str): table name
         limit (int): number of rows to print
         offset (int, optional): rows ignored before printing. Defaults to 0.
+        columns (list[str], optional): choose which columns to be included. Defaults to '*', i.e. all columns.
+        order_col (str, optional): choose which column to order by. Defaults to 'Date'.
+        order (int, optional): choose in which order it should be returned. 0 -> Ascending order, 1 -> descending order. Defaults to '1'.
 
     Returns:
         list[tuple]: list of limited number of rows as tuples
     """
 
-    if offset == 0:
-        limit = str(limit)
-        offset = str(offset)
-        mycursor.execute(f"SELECT * FROM `{table}` LIMIT {limit}")
-    elif offset > 0:
-        limit = str(limit)
-        offset = str(offset)
-        mycursor.execute(f"SELECT * FROM `{table}` LIMIT {limit} OFFSET {offset}")
+    if columns==['*']:
+        columns = ', '.join(columns)
+    else:
+        columns = ['`'+i+'`' for i in columns]
+        columns = ', '.join(columns)
+
+    if order == 0:
+        direction = 'ASC'
+    elif order == 1:
+        direction = 'DESC'
+
+    query = f"SELECT {columns} FROM `{table}` ORDER BY `{order_col}` {direction} LIMIT %s OFFSET %s"
+
+    mycursor.execute(query, (limit, offset))
     
     myresult = mycursor.fetchall()
+    
+    col_names = [desc[0] for desc in mycursor.description]
 
-    return myresult
+    rows_as_dicts = [dict(zip(col_names, row)) for row in myresult]
+    return rows_as_dicts
+
 
 def delete_rows(mydb, mycursor, table: str, column: str, val):
     """

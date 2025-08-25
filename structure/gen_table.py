@@ -13,7 +13,7 @@ if __name__=='__main__':
     #tables.add_table(mycursor, 'screener', ['Date', 'Time', 'Company ID', 'Country', 'Exchange', 'Market', 'Industry', 'Summary', 'Guidance', 'Strategy', 'Refinancing', 'Spin-off', 'Sale', 'Merger', 'Major Cost Reduction', 'Bankruptcy', 'Other', 'Price change'])
     #tables.show_tables(mycursor)
 
-    print(tables.get_columns(mycursor, 'screener'))
+    #print(tables.get_columns(mycursor, 'screener'))
 
     #tables.add_column(mydb, mycursor, table_name, 'Summary')
     #tables.add_column(mydb, mycursor, table_name, 'Guidance')
@@ -27,15 +27,19 @@ if __name__=='__main__':
 
     #print(s)
     
-    """now = datetime.now()
+    now = datetime.now()
     current_date = now.date()
     current_time = now.strftime("%H:%M:%S")
     
-    row = (current_date, current_time, 'Lindex', 'Finland', 'Helsinki', 'Mid Cap', 'Retail')
+    row = (current_date, current_time, 'Lindex 4', 'Finland', 'Helsinki', 'Mid Cap', 'Retail')
     for col in cols[7:-1]:
         row += (s[col],)
     #print(row)
     row += (5,)
-    tables.insert(mydb, mycursor, table_name, [row])"""
+    tables.insert(mydb, mycursor, table_name, [row])
 
     #print(tables.get_columns(mycursor,table_name, ['Summary', 'Guidance', 'Spin-off']))
+
+    rows = tables.get_limited_rows(mycursor, table_name, 5, columns=['Date', 'Summary', 'Guidance'])
+
+    print(rows)

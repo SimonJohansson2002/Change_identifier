@@ -1,0 +1,32 @@
+.news-feed {
+    margin-top: 1.5%;
+    border-collapse: separate;
+    border-spacing: 0 5px;
+}
+
+.news-feed td, 
+.news-feed th {
+    border: 0;
+    padding: 8px;
+}
+
+.news-feed th {
+    font-weight: normal;
+    font-size: 18px;
+    background-color: rgba(80, 80, 80, 0.5)
+}
+
+.news-feed td {
+    font-weight: 300;
+    background-color: rgba(100, 100, 100, 0.5)
+}
+
+.news-feed tr td:first-child, .news-feed tr th:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.news-feed tr td:last-child, .news-feed tr th:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
