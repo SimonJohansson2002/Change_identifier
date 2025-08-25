@@ -31,6 +31,8 @@ Use MySQL in python:
 
 Once database is running, mydb and mycursor should exist as a global variable. 
 
+See structure.gen_table on how to receive the data in the table. 
+
 ## Features
 
 The features are:
@@ -96,4 +98,3 @@ Scraping
 - 'No PDF available' -> No pdf with title "PDF" available for the latest notification in MFN
 - 'No pdf:s available' -> No pdf:s with any title available for the latest notification in MFN
 - 'Error reading PDF' -> pdf exists but couldn't read it
-

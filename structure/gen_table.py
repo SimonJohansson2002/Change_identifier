@@ -13,7 +13,7 @@ if __name__=='__main__':
     #tables.add_table(mycursor, 'screener', ['Date', 'Time', 'Company ID', 'Country', 'Exchange', 'Market', 'Industry', 'Summary', 'Guidance', 'Strategy', 'Refinancing', 'Spin-off', 'Sale', 'Merger', 'Major Cost Reduction', 'Bankruptcy', 'Other', 'Price change'])
     #tables.show_tables(mycursor)
 
-    #tables.content_table(mycursor, 'screener')
+    print(tables.get_columns(mycursor, 'screener'))
 
     #tables.add_column(mydb, mycursor, table_name, 'Summary')
     #tables.add_column(mydb, mycursor, table_name, 'Guidance')

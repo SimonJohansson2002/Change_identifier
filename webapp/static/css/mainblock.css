@@ -1,0 +1,16 @@
+.main-blocks {
+    display: flex;
+    flex-direction: row; 
+    padding-top: 1.5%;
+}
+
+.mid-block {
+    width: 66%;
+    border-left: 1px solid rgb(200, 200, 200);
+    border-right: 1px solid rgb(200, 200, 200);
+}
+
+
+.left-block {
+    width: 17%;
+}

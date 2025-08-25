@@ -1,11 +1,10 @@
 body {
   font-family: 'Fira Sans', sans-serif;
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-bottom: 0;
-  background: linear-gradient(to bottom, rgb(80, 80, 80), rgb(30, 30, 30));
-  color: rgb(200, 200, 200);
+  padding: 0;
+  background: linear-gradient(to bottom, rgb(200, 120, 120), rgb(100, 100, 100));
+  color: rgb(240, 240, 240);
   min-height: 100vh;
+  margin: 0;
 }
 
 /* lines */
@@ -31,10 +30,4 @@ hr.vertical-small {
   padding: 0;
   background-color: rgb(170, 170, 170);
   border: none;
-}
-
-/* paragraphs */
-p {
-  padding-left: 10px;
-  padding-right: 10px;
 }
