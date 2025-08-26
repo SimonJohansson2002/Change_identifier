@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DeltAlert - {{ company[0]['Company ID'] }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mainblock.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+</head>
+<body>
+
+<div class="header">
+<div class="header-row">
+    <a href="/">
+        <h1>DeltAlert</h1>
+    </a>
+    <div class="button-bar">
+        <a href="/livenews">
+        <button class="btn">Live News</button>
+        </a>
+        <a href="/screener">
+        <button class="btn">Screener</button>
+        </a>
+    </div>
+</div>
+
+</div>
+
+<div class="main-blocks">
+<div class="left-block">
+
+</div>
+
+<div class="mid-block">
+  <h2>{{ company[0]['Company ID'] }}</h2>
+  <p>
+  Company details
+  </p>
+
+</div>
+
+
+<div class="right-block">
+
+</div>
+</div>
+</body>
+</html>

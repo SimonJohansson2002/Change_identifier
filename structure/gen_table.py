@@ -5,19 +5,73 @@ from datetime import datetime
 
 if __name__=='__main__':
     table_name = 'screener'
-    #mydb, mycursor = databases.init_db('jfyu_1&ofQnsp1^d6FJ')
+
+    columns = ['Date', #remove this after changing structure_output
+               'Time', 
+               'Company ID', 
+               'Exchange', 
+               'Market', 
+               'Industry', 
+               'Summary', 
+               'Guidance', 
+               'Strategy', 
+               'Refinancing', 
+               'Spin-off', 
+               'Sale', 
+               'Merger', 
+               'Major cost reduction', 
+               'Bankruptcy', 
+               'Other', 
+               'Price change',
+               'Revenue',
+               'Gross profit',
+               'Operating profit',
+               'Net profit',
+               'Operating cash flow',
+               'Cash and equivalents',
+               'Debt']
+    
+    columns = ['Date', 
+               'Time', 
+               'Company ID', 
+               'Exchange', 
+               'Market', 
+               'Industry', 
+               'Summary', 
+               'Guidance', 
+               'Strategy', 
+               'Restructurings', 
+               'Price change',
+               'Revenue',
+               'Gross profit',
+               'Operating profit',
+               'Net profit',
+               'Operating cash flow',
+               'Cash and equivalents',
+               'Debt']
+    
+    news_cols = ['Date', 
+               'Time', 
+               'Company ID', 
+               'Exchange', 
+               'Market', 
+               'Industry', 
+               'Summary']
+    
+    screener_cols = ['Date', 
+               'Time', 
+               'Company ID', 
+               'Exchange', 
+               'Market', 
+               'Industry', 
+               'Guidance', 
+               'Strategy', 
+               'Restructurings']
+    
     mydb, mycursor = databases.access_db('jfyu_1&ofQnsp1^d6FJ', 'deltalert')
-    #databases.show_dbs(mycursor)
 
     #tables.drop_table(mycursor, table_name)
-    #tables.add_table(mycursor, 'screener', ['Date', 'Time', 'Company ID', 'Country', 'Exchange', 'Market', 'Industry', 'Summary', 'Guidance', 'Strategy', 'Refinancing', 'Spin-off', 'Sale', 'Merger', 'Major Cost Reduction', 'Bankruptcy', 'Other', 'Price change'])
-    #tables.show_tables(mycursor)
-
-    #print(tables.get_columns(mycursor, 'screener'))
-
-    #tables.add_column(mydb, mycursor, table_name, 'Summary')
-    #tables.add_column(mydb, mycursor, table_name, 'Guidance')
-    #tables.delete_column(mydb,mycursor,table_name,'Unknown')
+    #tables.add_table(mycursor, 'screener', columns)
 
     cols = tables.get_col_names(mycursor, table_name)
     #print(cols)
@@ -38,8 +92,6 @@ if __name__=='__main__':
     row += (5,)
     tables.insert(mydb, mycursor, table_name, [row])
 
-    #print(tables.get_columns(mycursor,table_name, ['Summary', 'Guidance', 'Spin-off']))
+    rows = tables.get_limited_rows(mycursor, table_name, 5, columns=news_cols)
 
-    rows = tables.get_limited_rows(mycursor, table_name, 5, columns=['Date', 'Summary', 'Guidance'])
-
-    print(rows)
+    #print(rows)

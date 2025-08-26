@@ -10,23 +10,39 @@
     padding: 8px;
 }
 
+/* Column labels */
 .news-feed th {
     font-weight: normal;
     font-size: 18px;
-    background-color: rgba(80, 80, 80, 0.5)
+    background-color: rgba(255, 130, 0, 0.7);
 }
 
+/* Cells */
 .news-feed td {
     font-weight: 300;
-    background-color: rgba(100, 100, 100, 0.5)
+    background-color: rgba(160, 160, 160, 0.5)
 }
 
+/* Corner style */
 .news-feed tr td:first-child, .news-feed tr th:first-child {
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
 }
 
 .news-feed tr td:last-child, .news-feed tr th:last-child {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+/* Links inside the news-feed table */
+.news-feed a {
+    color: rgba(0, 80, 255, 0.8);
+    text-decoration: none;
+    font-weight: 300;
+    transition: color 0.2s ease;
+}
+
+.news-feed a:hover {
+    color: rgba(90, 180, 250, 0.8);
+    text-decoration: underline;
 }

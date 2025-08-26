@@ -115,27 +115,42 @@ def get_columns(mycursor, table: str, columns: list[str]=['*']) -> list[tuple]:
 
     return myresult
 
-def get_rows(mycursor, table: str, column: str, val) -> list[tuple]:
+def get_rows(mycursor, table: str, limit: int, val, val_col: str = 'Company ID', columns: list[str] = ['*'], order_col: str = "Date", order: int = 1) -> list[dict]:
     """
     Returns all rows in the table with a specific value in a given column. 
 
     Args:
         table (str): table name
-        column (str): column name
+        limit (str): number of rows to print
         val (_type_): specific value to look for, type depends on what it was inserted as
+        val_col (str, optional): the column in which the value should be looked for. Defaults to 'Company ID'.
+        columns (list[str], optional): choose which columns to be included. Defaults to '*', i.e. all columns.
+        order_col (str, optional): choose which column to order by. Defaults to 'Date'.
+        order (int, optional): choose in which order it should be returned. 0 -> Ascending order, 1 -> descending order. Defaults to '1'.
 
     Returns:
-        list[tuple]: list of rows as tuples with a specific value in a given column
+        list[dict]: list of rows as dictionaries with a specific value in a given column. The keys are columns. 
     """
 
-    sql = f"SELECT * FROM `{table}` WHERE `{column}` = %s"
-    val = (val, )
+    if columns==['*']:
+        columns = ', '.join(columns)
+    else:
+        columns = ['`'+i+'`' for i in columns]
+        columns = ', '.join(columns)
 
-    mycursor.execute(sql, val)
+    direction = 'DESC' if order == 1 else 'ASC'
+
+    query = f"SELECT {columns} FROM `{table}` WHERE `{val_col}` = %s ORDER BY `{order_col}` {direction} LIMIT %s"
+
+    mycursor.execute(query, (val, limit))
 
     myresult = mycursor.fetchall()
 
-    return myresult
+    col_names = [desc[0] for desc in mycursor.description]
+
+    rows_as_dicts = [dict(zip(col_names, row)) for row in myresult]
+
+    return rows_as_dicts
 
 def get_sorted(mycursor, table: str, column: str, order: int=0) -> list[tuple]:
     """
@@ -160,7 +175,7 @@ def get_sorted(mycursor, table: str, column: str, order: int=0) -> list[tuple]:
 
     return myresult
 
-def get_limited_rows(mycursor, table: str, limit: int, offset: int=0, columns: list[str] = ['*'], order_col: str = "Date", order: int = 1) -> list[tuple]:
+def get_limited_rows(mycursor, table: str, limit: int, offset: int=0, columns: list[str] = ['*'], order_col: str = "Date", order: int = 1) -> list[dict]:
     """
     Returns a limited number of rows, ignoring a given number of rows.
 
@@ -173,7 +188,7 @@ def get_limited_rows(mycursor, table: str, limit: int, offset: int=0, columns: l
         order (int, optional): choose in which order it should be returned. 0 -> Ascending order, 1 -> descending order. Defaults to '1'.
 
     Returns:
-        list[tuple]: list of limited number of rows as tuples
+        list[dict]: list of limited number of rows as dictionaries. The keys are columns. 
     """
 
     if columns==['*']:
@@ -182,10 +197,7 @@ def get_limited_rows(mycursor, table: str, limit: int, offset: int=0, columns: l
         columns = ['`'+i+'`' for i in columns]
         columns = ', '.join(columns)
 
-    if order == 0:
-        direction = 'ASC'
-    elif order == 1:
-        direction = 'DESC'
+    direction = 'DESC' if order == 1 else 'ASC'
 
     query = f"SELECT {columns} FROM `{table}` ORDER BY `{order_col}` {direction} LIMIT %s OFFSET %s"
 

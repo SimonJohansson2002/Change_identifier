@@ -15,7 +15,7 @@ def classifier(client: openai.OpenAI, report_text: str, tables: list=None) -> st
     """
     # Construct the system prompt
     system_prompt = (
-        "You are a financial analyst AI. Given a company report excerpt, classify it from three perspectives. "
+        "You are a financial analyst AI. Given a company report excerpt, classify it from the following perspectives. "
         "Use only the EXACT labels provided below and follow the exact output format.\n\n"
 
         "### Summary ###\n"
@@ -41,8 +41,18 @@ def classifier(client: openai.OpenAI, report_text: str, tables: list=None) -> st
         "- Unknown: Restructuring is mentioned, but the form is unclear.\n"
         "Provide a Yes/No for each type. Then explain your reasoning.\n\n"
 
+        "### Finance ###"
+        "Find the following financial numbers for the last quarter (not the last two or three quarters) if they exist."
+        "Revenue"
+        "Gross profit"
+        "Operating profit"
+        "Net profit"
+        "Operating cash flow"
+        "Cash and equivalents"
+        "Debt"
+
         "### Output Format (Strict) ###\n"
-        "Summary: <max 250 characters>\n\n"
+        "Summary: Challenges - <mac 125 characters>. Highlights and achievements - <max 125 characters>. \n\n"
         "Guidance: <guidance text or 'None'>\n\n"
         "Strategy: <'None' or 'Changed'>\n"
         "Reason: <brief explanation>\n\n"
@@ -51,10 +61,17 @@ def classifier(client: openai.OpenAI, report_text: str, tables: list=None) -> st
         "Spinoff: <Yes/No>\n"
         "Sale: <Yes/No>\n"
         "Merger: <Yes/No>\n"
-        "Major Cost Reduction: <Yes/No>\n"
+        "Major cost reduction: <Yes/No>\n"
         "Bankruptcy: <Yes/No>\n"
         "Unknown: <Yes/No>\n"
-        "Reason: <brief explanation>"
+        "Reason: <brief explanation>\n\n"
+        "Revenue: <number and currency>\n"
+        "Gross profit: <number and currency>\n"
+        "Operating profit: <number and currency>\n"
+        "Net profit: <number and currency>\n"
+        "Operating cash flow: <number and currency>\n"
+        "Cash and equivalents: <number and currency>\n"
+        "Debt: <number and currency>"
 
         "Do not include any other text outside of the required format."
     )
