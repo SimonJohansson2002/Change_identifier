@@ -1,6 +1,6 @@
 import pdfplumber
 
-def extract_txt(pdf_path, include_tables=False):
+def extract_txt(pdf_path: str, include_tables: bool = False):
     full_text = ""
     all_tables = []
 
