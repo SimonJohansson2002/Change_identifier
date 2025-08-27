@@ -3,7 +3,7 @@
 
 This project requires the following Python libraries:
 - openai
-- pdplumber
+- pdfplumber
 - requests
 - mysql.connector
 - BeautifulSoup from bs4
