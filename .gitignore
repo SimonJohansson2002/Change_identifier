@@ -4,3 +4,4 @@ init.txt
 .vscode/
 test.*
 classification.txt
+.env

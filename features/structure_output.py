@@ -1,5 +1,6 @@
 from .classifier import classifier
 from .extract_txt import extract_txt
+from dotenv import load_dotenv
 import openai
 
 def structure_output(string: str) -> dict:
@@ -93,8 +94,9 @@ def get_classifications(filename: str, api_key: str) -> str:
 if __name__=='__main__':
     """text, tables = extract_txt("test_data/LINDEX25Q2.pdf")
         
-    api = "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"
-
+    load_dotenv()
+    api = os.getenv("OPENAI_API_KEY")
+    
     client = openai.OpenAI(api_key=api)
     classification = classifier(client, text)"""
 
